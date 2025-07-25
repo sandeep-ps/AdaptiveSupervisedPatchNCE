@@ -7,6 +7,7 @@ ENV PYTHONUNBUFFERED=1
 ENV CUDA_HOME=/usr/local/cuda
 ENV PATH=${CUDA_HOME}/bin:${PATH}
 ENV LD_LIBRARY_PATH=${CUDA_HOME}/lib64:${LD_LIBRARY_PATH}
+ENV CONDA_OVERRIDE_CUDA=11.6
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -37,17 +38,16 @@ ENV PATH="/opt/conda/bin:$PATH"
 # Update certificates and configure conda
 RUN update-ca-certificates \
     && conda config --set ssl_verify false \
-    && conda config --set channel_priority strict \
-    && conda config --add channels conda-forge
+    && conda config --set channel_priority strict
 
-# Create conda environment and install packages
-RUN conda create -n ASP python=3.8 -y
+# Create conda environment using conda-forge only
+RUN conda create -n ASP python=3.8 -c conda-forge --override-channels -y
 
 # Make RUN commands use the new environment
 SHELL ["conda", "run", "-n", "ASP", "/bin/bash", "-c"]
 
 # Install PyTorch with CUDA support
-RUN conda install pytorch torchvision pytorch-cuda=11.6 -c pytorch -c nvidia -y
+RUN conda install pytorch torchvision pytorch-cuda=11.6 -c pytorch -c nvidia --override-channels -y
 
 # Install other dependencies
 RUN conda install -c conda-forge \
@@ -59,7 +59,7 @@ RUN conda install -c conda-forge \
     visdom \
     packaging \
     gputil \
-    -y
+    --override-channels -y
 
 # Install additional dependencies with pip
 RUN pip install --no-cache-dir \

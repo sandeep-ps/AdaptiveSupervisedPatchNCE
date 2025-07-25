@@ -1,5 +1,5 @@
 # Use NVIDIA CUDA base image with Python 3.8
-FROM nvidia/cuda:11.6.1-devel-ubuntu20.04
+FROM nvidia/cuda:11.8-devel-ubuntu20.04
 
 # Set environment variables
 ENV DEBIAN_FRONTEND=noninteractive
@@ -7,7 +7,7 @@ ENV PYTHONUNBUFFERED=1
 ENV CUDA_HOME=/usr/local/cuda
 ENV PATH=${CUDA_HOME}/bin:${PATH}
 ENV LD_LIBRARY_PATH=${CUDA_HOME}/lib64:${LD_LIBRARY_PATH}
-ENV CONDA_OVERRIDE_CUDA=11.6
+ENV CONDA_OVERRIDE_CUDA=11.8
 ENV INTEL_JIT_PROVIDER=0
 
 # Install system dependencies
@@ -48,7 +48,7 @@ RUN conda create -n ASP python=3.8 -c conda-forge --override-channels -y
 SHELL ["conda", "run", "-n", "ASP", "/bin/bash", "-c"]
 
 # Install PyTorch with CUDA support using conda with explicit CUDA configuration
-RUN conda install pytorch=1.13.1 torchvision=0.14.1 pytorch-cuda=11.6 -c pytorch -c nvidia -c conda-forge --override-channels -y
+RUN conda install pytorch=1.13.1 torchvision=0.14.1 pytorch-cuda=11.8 -c pytorch -c nvidia -c conda-forge --override-channels -y
 
 # Install other dependencies
 RUN conda install -c conda-forge \

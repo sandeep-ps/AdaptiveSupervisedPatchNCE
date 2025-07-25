@@ -46,8 +46,8 @@ RUN conda create -n ASP python=3.8 -c conda-forge --override-channels -y
 # Make RUN commands use the new environment
 SHELL ["conda", "run", "-n", "ASP", "/bin/bash", "-c"]
 
-# Install PyTorch with CUDA support using pip (alternative approach)
-RUN pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu116
+# Install PyTorch with CUDA support using conda (alternative approach)
+RUN conda install pytorch=1.13.1 torchvision=0.14.1 pytorch-cuda=11.6 -c pytorch -c nvidia -c conda-forge --override-channels -y
 
 # Install other dependencies
 RUN conda install -c conda-forge \
@@ -62,7 +62,7 @@ RUN conda install -c conda-forge \
     --override-channels -y
 
 # Install additional dependencies with pip
-RUN pip install --no-cache-dir \
+RUN pip install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org --no-cache-dir \
     tensorboard \
     matplotlib \
     seaborn \

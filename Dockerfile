@@ -34,19 +34,39 @@ RUN wget --no-check-certificate https://repo.anaconda.com/miniconda/Miniconda3-l
 # Add conda to PATH
 ENV PATH="/opt/conda/bin:$PATH"
 
-# Update certificates and configure conda for SSL
+# Update certificates and configure conda
 RUN update-ca-certificates \
     && conda config --set ssl_verify false \
-    && conda config --set channel_priority strict
+    && conda config --set channel_priority strict \
+    && conda config --add channels conda-forge
 
-# Copy environment file
-COPY environment.yml /tmp/environment.yml
-
-# Create conda environment
-RUN conda env create -f /tmp/environment.yml
+# Create conda environment and install packages
+RUN conda create -n ASP python=3.8 -y
 
 # Make RUN commands use the new environment
 SHELL ["conda", "run", "-n", "ASP", "/bin/bash", "-c"]
+
+# Install PyTorch with CUDA support
+RUN conda install pytorch torchvision pytorch-cuda=11.6 -c pytorch -c nvidia -y
+
+# Install other dependencies
+RUN conda install -c conda-forge \
+    scipy \
+    dominate \
+    opencv \
+    pillow \
+    "numpy<2" \
+    visdom \
+    packaging \
+    gputil \
+    -y
+
+# Install additional dependencies with pip
+RUN pip install --no-cache-dir \
+    tensorboard \
+    matplotlib \
+    seaborn \
+    tqdm
 
 # Activate the environment
 RUN echo "conda activate ASP" >> ~/.bashrc
@@ -56,13 +76,6 @@ WORKDIR /workspace
 
 # Copy project files
 COPY . /workspace/
-
-# Install additional dependencies that might be needed
-RUN pip install --no-cache-dir \
-    tensorboard \
-    matplotlib \
-    seaborn \
-    tqdm
 
 # Create directories for data and results
 RUN mkdir -p /workspace/datasets \

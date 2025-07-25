@@ -61,7 +61,7 @@ run_training() {
         -p 8097:8097 \
         -p 6006:6006 \
         asp-training \
-        conda run -n ASP python -m experiments.mist train $gpu_id
+        conda run -n ASP python -m experiments mist train $gpu_id
 }
 
 # Run testing

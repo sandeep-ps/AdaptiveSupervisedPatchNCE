@@ -23,7 +23,7 @@ services:
       # For tensorboard (if needed)
       - "6006:6006"
     working_dir: /workspace
-    command: conda run -n ASP python -m experiments.mist train 0
+    command: conda run -n ASP python -m experiments mist train 0
     stdin_open: true
     tty: true
 

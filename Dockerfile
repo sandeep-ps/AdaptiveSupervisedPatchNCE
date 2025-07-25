@@ -83,4 +83,4 @@ RUN mkdir -p /workspace/datasets \
     && mkdir -p /workspace/results
 
 # Set default command
-CMD ["conda", "run", "-n", "ASP", "python", "-m", "experiments.mist", "train", "0"]
+CMD ["conda", "run", "-n", "ASP", "python", "-m", "experiments", "mist", "train", "0"]

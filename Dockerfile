@@ -46,8 +46,8 @@ RUN conda create -n ASP python=3.8 -c conda-forge --override-channels -y
 # Make RUN commands use the new environment
 SHELL ["conda", "run", "-n", "ASP", "/bin/bash", "-c"]
 
-# Install PyTorch with CUDA support
-RUN conda install pytorch torchvision pytorch-cuda=11.6 -c pytorch -c nvidia --override-channels -y
+# Install PyTorch with CUDA support using pip (alternative approach)
+RUN pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu116
 
 # Install other dependencies
 RUN conda install -c conda-forge \

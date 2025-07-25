@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  asp-training:
+    build: .
+    container_name: asp-training
+    runtime: nvidia
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility
+    volumes:
+      # Mount your datasets
+      - ./datasets:/workspace/datasets
+      # Mount checkpoints for model persistence
+      - ./checkpoints:/workspace/checkpoints
+      # Mount results for output
+      - ./results:/workspace/results
+      # Optional: mount logs
+      - ./logs:/workspace/logs
+    ports:
+      # For visdom visualization (if needed)
+      - "8097:8097"
+      # For tensorboard (if needed)
+      - "6006:6006"
+    working_dir: /workspace
+    command: conda run -n ASP python -m experiments.mist train 0
+    stdin_open: true
+    tty: true
+
+  # Alternative service for testing
+  asp-testing:
+    build: .
+    container_name: asp-testing
+    runtime: nvidia
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility
+    volumes:
+      - ./datasets:/workspace/datasets
+      - ./checkpoints:/workspace/checkpoints
+      - ./results:/workspace/results
+    ports:
+      - "8097:8097"
+    working_dir: /workspace
+    command: conda run -n ASP python test.py --dataroot ./datasets/your_dataset --name your_experiment --model your_model
+    stdin_open: true
+    tty: true 

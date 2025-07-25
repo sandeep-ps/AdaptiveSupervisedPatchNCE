@@ -34,6 +34,11 @@ RUN wget --no-check-certificate https://repo.anaconda.com/miniconda/Miniconda3-l
 # Add conda to PATH
 ENV PATH="/opt/conda/bin:$PATH"
 
+# Update certificates and configure conda for SSL
+RUN update-ca-certificates \
+    && conda config --set ssl_verify false \
+    && conda config --set channel_priority strict
+
 # Copy environment file
 COPY environment.yml /tmp/environment.yml
 

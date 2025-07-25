@@ -33,9 +33,9 @@ check_docker() {
 
 # Check if NVIDIA Docker runtime is available
 check_nvidia_docker() {
-    if ! docker info | grep -q "nvidia"; then
-        print_warning "NVIDIA Docker runtime not detected. GPU support may not work."
-        print_warning "Make sure you have nvidia-docker2 installed."
+    if ! which nvidia-container-toolkit > /dev/null 2>&1; then
+        print_warning "NVIDIA Container Toolkit not detected. GPU support may not work."
+        print_warning "Make sure you have nvidia-container-toolkit installed."
     fi
 }
 

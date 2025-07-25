@@ -54,6 +54,7 @@ run_training() {
     docker run --rm -it \
         --gpus all \
         --shm-size=8g \
+        -e INTEL_JIT_PROVIDER=0 \
         -v "$(pwd)/datasets:/workspace/datasets" \
         -v "$(pwd)/checkpoints:/workspace/checkpoints" \
         -v "$(pwd)/results:/workspace/results" \

@@ -11,9 +11,9 @@ dependencies:
 - scipy
 - dominate
 - torchvision
-- opencv
+- opencv=4.7.0
 - Pillow
-- numpy
+- numpy=1.24.3
 - visdom
 - packaging
 - GPUtil
